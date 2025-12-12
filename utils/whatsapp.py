@@ -1,23 +1,16 @@
-import requests
 import os
-from utils.config import API_URL
+import requests
+
+ZAPI_INSTANCE = os.getenv("ZAPI_INSTANCE")
+ZAPI_TOKEN = os.getenv("ZAPI_TOKEN")
 
 def enviar_mensagem(telefone, texto):
 
-    # Sanitiza o número
-    telefone = str(telefone).replace("+", "").replace(" ", "")
-    if telefone.startswith("0"):
-        telefone = telefone[1:]
-
-    print("📞 Número sanitizado:", telefone)
-
-    url = f"{API_URL}/send-text"
+    url = f"https://api.z-api.io/instances/{ZAPI_INSTANCE}/token/{ZAPI_TOKEN}/send-text"
 
     payload = {
         "phone": telefone,
-        "message": {
-            "text": texto
-        }
+        "message": texto
     }
 
     print("➡️ Enviando para Z-API:", payload)

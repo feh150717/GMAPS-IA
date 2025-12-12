@@ -1,5 +1,5 @@
 import requests
-from utils.config import API_URL, API_ID, API_TOKEN
+from .config import API_URL, API_ID, API_TOKEN
 
 def enviar_mensagem(phone, mensagem):
     url = f"{API_URL}/send-text"

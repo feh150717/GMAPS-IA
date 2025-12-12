@@ -10,7 +10,7 @@ def webhook():
 
     print("Webhook recebido:", data)
 
-    # NOVO PADRÃO da Z-API (correto)
+    # NOVO PADRÃO da Z-API
     message = data.get("message", {})
     msg = message.get("text", "")
     phone = message.get("from", "")

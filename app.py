@@ -8,7 +8,7 @@ app = Flask(__name__)
 def webhook():
     data = request.json
 
-    # A Z-API envia assim:
+    # Padrão que a Z-API envia:
     msg = data.get("data", {}).get("message", {}).get("text", "")
     phone = data.get("data", {}).get("phone", "")
 
@@ -22,4 +22,4 @@ def webhook():
 
 @app.route("/", methods=["GET"])
 def home():
-    return "GMAPS IA ONLINE"    
+    return "GMAPS IA ONLINE"

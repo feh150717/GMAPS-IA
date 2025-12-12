@@ -1,20 +1,22 @@
 import requests
-from config import ZAPI_INSTANCE, ZAPI_TOKEN
+import os
+from utils.config import API_URL, INSTANCE_TOKEN
 
-BASE_URL = f"https://api.z-api.io/instances/{ZAPI_INSTANCE}/token/{ZAPI_TOKEN}"
+def enviar_mensagem(phone, mensagem):
+    url = f"{API_URL}/send-text"
 
-def enviar_mensagem(numero, mensagem):
-    try:
-        url = f"{BASE_URL}/send-text"
+    payload = {
+        "phone": phone,
+        "message": mensagem
+    }
 
-        payload = {
-            "phone": numero,
-            "message": mensagem
-        }
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {INSTANCE_TOKEN}"
+    }
 
-        response = requests.post(url, json=payload)
+    response = requests.post(url, json=payload, headers=headers)
 
-        return response.json()
+    print("Resposta Z-API:", response.text)
 
-    except Exception as e:
-        return {"error": str(e)}
+    return response.json()

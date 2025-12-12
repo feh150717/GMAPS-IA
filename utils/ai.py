@@ -17,4 +17,5 @@ def gerar_resposta(texto):
         ]
     )
 
-    return resposta.choices[0].message["content"]
+    # ACESSO CORRETO NA NOVA SDK
+    return resposta.choices[0].message.content

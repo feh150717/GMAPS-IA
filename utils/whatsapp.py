@@ -1,8 +1,8 @@
 import requests
-import os
-from utils.config import API_URL, INSTANCE_TOKEN
+from utils.config import API_URL, API_ID, API_TOKEN
 
 def enviar_mensagem(phone, mensagem):
+
     url = f"{API_URL}/send-text"
 
     payload = {
@@ -11,8 +11,7 @@ def enviar_mensagem(phone, mensagem):
     }
 
     headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {INSTANCE_TOKEN}"
+        "Content-Type": "application/json"
     }
 
     response = requests.post(url, json=payload, headers=headers)

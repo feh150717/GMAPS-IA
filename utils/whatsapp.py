@@ -2,7 +2,8 @@ import requests
 from utils.config import API_URL
 
 def enviar_mensagem(phone, mensagem):
-    url = f"{API_URL}/messages"
+    # O endpoint correto da sua instância é /send-text
+    url = f"{API_URL}/send-text"
 
     payload = {
         "phone": phone,

@@ -4,11 +4,13 @@ from utils.whatsapp import enviar_mensagem
 
 app = Flask(__name__)
 
-@app.route('/webhook', methods=['POST'])
+@app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.json
-    msg = data.get("message", "")
-    phone = data.get("phone", "")
+
+    # A Z-API envia assim:
+    msg = data.get("data", {}).get("message", {}).get("text", "")
+    phone = data.get("data", {}).get("phone", "")
 
     if not msg or not phone:
         return jsonify({"status": "ignored"})
@@ -18,6 +20,6 @@ def webhook():
 
     return jsonify({"status": "sent"})
 
-@app.route('/', methods=['GET'])
+@app.route("/", methods=["GET"])
 def home():
-    return "GMAPS IA ONLINE"
+    return "GMAPS IA ONLINE"    

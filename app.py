@@ -6,33 +6,53 @@ app = Flask(__name__)
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
-    data = request.json
-    print("Webhook recebido:", data)
+    try:
+        data = request.json
+        print("\n===== 📥 WEBHOOK RECEBIDO =====")
+        print(data)
 
-    # JSON REAL DA Z-API:
-    # {
-    #     "text": "Olá",
-    #     "phone": "5511919588710"
-    # }
+        # Extrai texto da mensagem
+        texto = (
+            data.get("text")
+            or data.get("message")
+            or data.get("body")
+            or data.get("lastMessage")
+            or ""
+        )
 
-    texto = data.get("text", "")
-    phone = data.get("phone", "")
+        # Extrai telefone da mensagem
+        phone = (
+            data.get("phone")
+            or data.get("from")
+            or data.get("sender")
+            or ""
+        )
 
-    if not texto or not phone:
-        print("Mensagem ignorada. JSON inválido.")
-        return jsonify({"status": "ignored"})
+        if not texto or not phone:
+            print("⚠️ JSON ignorado: faltando texto ou telefone")
+            return jsonify({"status": "ignored"}), 200
 
-    # GERA A RESPOSTA DA IA
-    resposta = gerar_resposta(texto)
+        print(f"📌 Mensagem recebida de {phone}: {texto}")
 
-    # ENVIA A RESPOSTA PARA O WHATSAPP VIA Z-API
-    enviar_mensagem(phone, resposta)
+        # Gera resposta da IA
+        resposta = gerar_resposta(texto)
+        print(f"🤖 Resposta da IA: {resposta}")
 
-    return jsonify({"status": "sent"})
+        # Envia resposta pelo WhatsApp
+        ZAPI_retorno = enviar_mensagem(phone, resposta)
+        print("📤 Retorno da Z-API:", ZAPI_retorno)
+
+        return jsonify({"status": "sent"}), 200
+
+    except Exception as e:
+        print("❌ ERRO NO WEBHOOK:", str(e))
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route("/", methods=["GET"])
 def home():
-    return "GMaps IA ONLINE"
+    return "GMAPS IA ONLINE"
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)

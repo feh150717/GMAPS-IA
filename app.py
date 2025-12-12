@@ -1,4 +1,3 @@
-
 from flask import Flask, request, jsonify
 from utils.ai import gerar_resposta
 from utils.whatsapp import enviar_mensagem
@@ -16,6 +15,7 @@ def webhook():
 
     resposta = gerar_resposta(msg)
     enviar_mensagem(phone, resposta)
+
     return jsonify({"status": "sent"})
 
 @app.route('/', methods=['GET'])

@@ -8,7 +8,7 @@ app = Flask(__name__)
 def webhook():
     data = request.json
 
-    # Padrão que a Z-API envia:
+    # Z-API envia neste formato:
     msg = data.get("data", {}).get("message", {}).get("text", "")
     phone = data.get("data", {}).get("phone", "")
 

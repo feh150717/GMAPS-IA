@@ -1,19 +1,17 @@
-from openai import OpenAI
-import os
-
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+import openai
 
 def gerar_resposta(texto):
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "user", "content": texto}
-            ]
-        )
 
-        resposta = response.choices[0].message["content"]
-        return resposta
+    # RESPOSTA CRUA DA IA
+    resposta = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "user", "content": texto}
+        ]
+    )
 
-    except Exception as e:
-        return f"Erro ao gerar resposta: {str(e)}"
+    # PEGA SOMENTE O TEXTO DA RESPOSTA
+    resposta_texto = resposta["choices"][0]["message"]["content"]
+
+    # GARANTE QUE É STRING
+    return str(resposta_texto)

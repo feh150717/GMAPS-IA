@@ -4,7 +4,6 @@ from utils.whatsapp import enviar_mensagem
 
 app = Flask(__name__)
 
-
 @app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.json
@@ -18,10 +17,8 @@ def webhook():
         print("Mensagem inválida.")
         return jsonify({"status": "ignored"})
 
-    # AGORA A IA RETORNA APENAS STRING
     resposta = gerar_resposta(texto)
 
-    # ENVIA PARA O CLIENTE
     enviar_mensagem(phone, resposta)
 
     return jsonify({"status": "sent"})

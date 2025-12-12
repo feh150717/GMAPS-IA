@@ -9,12 +9,9 @@ def enviar_mensagem(phone, mensagem):
         "message": mensagem
     }
 
-    headers = {
-        "Content-Type": "application/json"
-    }
+    headers = {"Content-Type": "application/json"}
 
     response = requests.post(url, json=payload, headers=headers)
-
     print("Resposta Z-API:", response.text)
 
     return response.json()

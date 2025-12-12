@@ -1,4 +1,6 @@
-API_ID = "3EB916797636317CC1202ABC0BC379A8"
-API_TOKEN = "5712F43089C15D6C00A791AD"
+import os
+
+API_ID = os.getenv("ZAPI_INSTANCE")
+API_TOKEN = os.getenv("ZAPI_TOKEN")
 
 API_URL = f"https://api.z-api.io/instances/{API_ID}/token/{API_TOKEN}"

@@ -10,9 +10,8 @@ def webhook():
 
     print("Webhook recebido:", data)
 
-    # Estrutura correta da Z-API
+    # NOVO PADRÃO da Z-API (correto)
     message = data.get("message", {})
-
     msg = message.get("text", "")
     phone = message.get("from", "")
 
@@ -28,3 +27,6 @@ def webhook():
 @app.route("/", methods=["GET"])
 def home():
     return "GMAPS IA ONLINE"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)

@@ -2,11 +2,15 @@ import requests
 from utils.config import API_URL
 
 def enviar_mensagem(phone, mensagem):
-    url = f"{API_URL}/send-text"
+    url = f"{API_URL}/messages"
 
     payload = {
-        "phone": phone,
-        "message": str(mensagem)  # garante que é string
+        "messages": [
+            {
+                "whatsappId": phone,
+                "text": str(mensagem)
+            }
+        ]
     }
 
     headers = {"Content-Type": "application/json"}

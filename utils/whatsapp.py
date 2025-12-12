@@ -1,11 +1,9 @@
-import os
 import requests
-
-ZAPI_INSTANCE = os.getenv("ZAPI_INSTANCE")
-ZAPI_TOKEN = os.getenv("ZAPI_TOKEN")
+from utils.config import API_URL
 
 def enviar_mensagem(telefone, texto):
-    url = f"https://api.z-api.io/instances/{ZAPI_INSTANCE}/token/{ZAPI_TOKEN}/send-text"
+
+    url = f"{API_URL}/send-text"
 
     payload = {
         "phone": telefone,
@@ -17,4 +15,8 @@ def enviar_mensagem(telefone, texto):
     try:
         return response.json()
     except:
-        return {"error": "Invalid response", "status_code": response.status_code, "text": response.text}
+        return {
+            "error": "Erro ao interpretar resposta",
+            "status_code": response.status_code,
+            "text": response.text
+        }

@@ -11,23 +11,25 @@ def webhook():
     print(data)
 
     texto = data.get("text", "")
-    phone = data.get("phone", "")
+    telefone = data.get("phone", "")
 
-    if not texto or not phone:
-        print("Mensagem inválida.")
+    if not texto or not telefone:
+        print("❌ Dados incompletos no webhook")
         return jsonify({"status": "ignored"})
 
+    # 🔥 GERA A RESPOSTA DA IA
     resposta = gerar_resposta(texto)
+    print("🤖 IA respondeu:", resposta)
 
-    enviar_mensagem(phone, resposta)
+    # 🔥 ENVIA A RESPOSTA PARA O WHATSAPP
+    retorno = enviar_mensagem(telefone, resposta)
+    print("📤 Retorno do envio Z-API:", retorno)
 
     return jsonify({"status": "sent"})
-
 
 @app.route("/", methods=["GET"])
 def home():
     return "GMAPS IA ONLINE"
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)

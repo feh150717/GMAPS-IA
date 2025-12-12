@@ -1,4 +1,7 @@
-OPENAI_API_KEY = "sk-...vsUA"
+# Configurações da Z-API
 
-ZAPI_INSTANCE = "3E9B...C379A0"
-ZAPI_TOKEN = "5034...7546D1"
+API_ID = "3EB916797636317CC1202ABC0BC379A8"   # ID da instância
+API_TOKEN = "50349354C6FA1AE4807546D1"        # Token da instância
+
+# URL base da API
+API_URL = f"https://api.z-api.io/instances/{API_ID}/token/{API_TOKEN}"

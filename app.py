@@ -11,7 +11,6 @@ def webhook():
     print("===== 📩 WEBHOOK RECEBIDO =====")
     print(data)
 
-    # CAPTURA TEXTO E TELEFONE
     texto = data.get("text", "")
     phone = data.get("phone", "")
 
@@ -19,13 +18,10 @@ def webhook():
         print("Mensagem inválida.")
         return jsonify({"status": "ignored"})
 
-    # GERA RESPOSTA DA IA
+    # AGORA A IA RETORNA APENAS STRING
     resposta = gerar_resposta(texto)
 
-    # GARANTE QUE A RESPOSTA SEJA STRING
-    resposta = str(resposta)
-
-    # ENVIA PARA A Z-API
+    # ENVIA PARA O CLIENTE
     enviar_mensagem(phone, resposta)
 
     return jsonify({"status": "sent"})
@@ -38,4 +34,3 @@ def home():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
-

@@ -11,7 +11,9 @@ def enviar_mensagem(phone, mensagem):
     }
 
     headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Client-Token": API_TOKEN,
+        "Instance-Id": API_ID
     }
 
     response = requests.post(url, json=payload, headers=headers)

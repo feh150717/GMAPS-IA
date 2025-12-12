@@ -10,17 +10,22 @@ def webhook():
     data = request.json
     print("Webhook recebido:", data)
 
-    # --- CAPTURA CORRETA DO JSON DA Z-API ---
+    # ------------------------------
+    # JSON REAL DA Z-API
+    # text → { "message": "Ola" }
+    # phone → "5511919508710"
+    # ------------------------------
     texto = data.get("text", {}).get("message", "")
     phone = data.get("phone", "")
 
     if not texto or not phone:
+        print("Mensagem ignorada. JSON inválido.")
         return jsonify({"status": "ignored"})
 
-    # Gera a resposta da IA
+    # GERA A RESPOSTA DA IA
     resposta = gerar_resposta(texto)
 
-    # Envia a resposta para o WhatsApp
+    # ENVIA A RESPOSTA PARA A Z-API
     enviar_mensagem(phone, resposta)
 
     return jsonify({"status": "sent"})

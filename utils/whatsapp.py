@@ -1,5 +1,5 @@
 import requests
-from .config import API_URL, API_ID, API_TOKEN
+from utils.config import API_URL
 
 def enviar_mensagem(phone, mensagem):
     url = f"{API_URL}/send-text"
@@ -10,9 +10,7 @@ def enviar_mensagem(phone, mensagem):
     }
 
     headers = {
-        "Content-Type": "application/json",
-        "Client-Token": API_TOKEN,
-        "Instance-Id": API_ID
+        "Content-Type": "application/json"
     }
 
     response = requests.post(url, json=payload, headers=headers)

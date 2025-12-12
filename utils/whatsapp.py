@@ -6,7 +6,7 @@ def enviar_mensagem(phone, mensagem):
 
     payload = {
         "phone": phone,
-        "message": mensagem
+        "message": str(mensagem)  # garante que é string
     }
 
     headers = {"Content-Type": "application/json"}

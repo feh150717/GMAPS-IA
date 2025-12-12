@@ -1,25 +1,20 @@
-from flask import Flask, request, jsonify
-from utils.ai import gerar_resposta
-from utils.whatsapp import enviar_mensagem
-
-app = Flask(__name__)
-
 @app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.json
 
-    # Z-API envia neste formato:
-    msg = data.get("data", {}).get("message", {}).get("text", "")
-    phone = data.get("data", {}).get("phone", "")
+    print("Webhook recebido:", data)
+
+    # A Z-API envia a mensagem neste formato:
+    message = data.get("message", {})
+
+    msg = message.get("text", "")
+    phone = message.get("from", "")
 
     if not msg or not phone:
         return jsonify({"status": "ignored"})
 
     resposta = gerar_resposta(msg)
+
     enviar_mensagem(phone, resposta)
 
     return jsonify({"status": "sent"})
-
-@app.route("/", methods=["GET"])
-def home():
-    return "GMAPS IA ONLINE"

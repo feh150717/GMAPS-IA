@@ -1,7 +1,7 @@
 
 from flask import Flask, request, jsonify
 from utils.ai import gerar_resposta
-from utils.zapi import enviar_mensagem
+from utils.whatsapp import enviar_mensagem
 
 app = Flask(__name__)
 

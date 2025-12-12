@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-from utils.ai import gerar_resposta
 from utils.whatsapp import enviar_mensagem
 
 app = Flask(__name__)
@@ -7,29 +6,30 @@ app = Flask(__name__)
 @app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.json
-    print("===== 📩 WEBHOOK RECEBIDO =====")
-    print(data)
+    print("📩 WEBHOOK RECEBIDO =>", data)
 
-    texto = data.get("text", "")
-    telefone = data.get("phone", "")
+    try:
+        texto = data["text"]["message"]
+        telefone = data["phone"]
+    except:
+        return jsonify({"error": "invalid payload"}), 400
 
-    if not texto or not telefone:
-        print("❌ Dados incompletos no webhook")
-        return jsonify({"status": "ignored"})
+    # 🔥 LOG para confirmar que pegou tudo certo
+    print("📞 Telefone:", telefone)
+    print("📝 Texto:", texto)
 
-    # 🔥 GERA A RESPOSTA DA IA
-    resposta = gerar_resposta(texto)
-    print("🤖 IA respondeu:", resposta)
+    # === RESPOSTA AUTOMÁTICA ===
+    if texto.lower() == "/teste":
+        enviar_mensagem(telefone, "🔥 Teste recebido com sucesso! A integração está funcionando.")
+        return jsonify({"status": "ok"})
 
-    # 🔥 ENVIA A RESPOSTA PARA O WHATSAPP
-    retorno = enviar_mensagem(telefone, resposta)
-    print("📤 Retorno do envio Z-API:", retorno)
+    # Resposta padrão
+    enviar_mensagem(telefone, "Olá! Sua mensagem foi recebida.")
+    return jsonify({"status": "ok"})
 
-    return jsonify({"status": "sent"})
-
-@app.route("/", methods=["GET"])
+@app.route("/")
 def home():
-    return "GMAPS IA ONLINE"
+    return "GMAPS-IA rodando!"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)

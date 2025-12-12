@@ -1,40 +1,46 @@
-from flask import Flask, request, jsonify
-from utils.ai import gerar_resposta
-from utils.whatsapp import enviar_mensagem
-
-app = Flask(__name__)
-
-
 @app.route("/webhook", methods=["POST"])
 def webhook():
-    data = request.json
-    print("Webhook recebido:", data)
+    try:
+        data = request.json
+        print("==== RECEBI WEBHOOK ====")
+        print(data)
 
-    # ------------------------------
-    # JSON REAL DA Z-API
-    # text → { "message": "Ola" }
-    # phone → "5511919508710"
-    # ------------------------------
-    texto = data.get("text", {}).get("message", "")
-    phone = data.get("phone", "")
+        # Se não veio JSON, registra mesmo assim
+        if data is None:
+            print("ERRO: request.json veio vazio")
+            return jsonify({"status": "invalid"}), 200
 
-    if not texto or not phone:
-        print("Mensagem ignorada. JSON inválido.")
-        return jsonify({"status": "ignored"})
+        # Captura todos os campos possíveis (Z-API às vezes muda o formato)
+        texto = ""
+        phone = ""
 
-    # GERA A RESPOSTA DA IA
-    resposta = gerar_resposta(texto)
+        # Opção 1: estrutura padrão
+        if "text" in data:
+            texto = data.get("text", {}).get("message", "")
+        if "phone" in data:
+            phone = data.get("phone", "")
 
-    # ENVIA A RESPOSTA PARA A Z-API
-    enviar_mensagem(phone, resposta)
+        # Opção 2: estrutura alternativa
+        if "message" in data:
+            texto = data.get("message", "")
+        if "from" in data:
+            phone = data.get("from", "")
 
-    return jsonify({"status": "sent"})
+        print("Texto extraído:", texto)
+        print("Phone extraído:", phone)
 
+        if not texto or not phone:
+            print("⚠ JSON inválido ou incompleto")
+            return jsonify({"status": "ignored"}), 200
 
-@app.route("/", methods=["GET"])
-def home():
-    return "GMAPS IA ONLINE"
+        # Gera resposta da IA
+        resposta = gerar_resposta(texto)
 
+        # Envia resposta ao WhatsApp
+        enviar_mensagem(phone, resposta)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+        return jsonify({"status": "sent"}), 200
+
+    except Exception as e:
+        print("ERRO NO WEBHOOK:", str(e))
+        return jsonify({"error": str(e)}), 500
